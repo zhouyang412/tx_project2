@@ -1,0 +1,13 @@
+model\dataset.py:
+初始化PairDataset类为dataset,处理每一条数据为((src, tgt))保存在该类的paris中
+
+model\dataset.py:
+SampleDataset --> 用于提取数据，转换成wordid并处理oov词
+src ---> source2ids --> x, oov : x中包含src中的词的id，其中oov词的id为vocab_size+x.index(w),即词表大小加上词在src中的下标
+tgt ---> abstract2ids --> ids : tgt中的oov词若不在对应src中则为UNK，否则对应的下标为，vocab_size + oov.index(w)，即词表大小加上对应src中oov列表的下标
+
+# train
+在训练模型的阶段，解码器部分是用y[: ,t]作为输入，y[: ,t+1]作为label。在计算loss的时候，将oov词当unk词进行计算。
+
+# predict
+在beamsearch中，不用还原oov词。根据search出的ids，直接还原，oov则从src中选取相应的word。
